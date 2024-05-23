@@ -1,0 +1,36 @@
+<html
+        xmlns:th="http://thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/dashboard/layout}">
+<head>
+    <title>Article Create </title>
+</head>
+
+<body>
+<div layout:fragment="container" class="container-fluid">
+    <div>
+        <form action="/admin/article/create" method="post">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="Title" name="title" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="subtitle" name="subTitle" />
+            </div>
+            <div class="form-group">
+                <textarea id="desc" class="form-control" type="text" placeholder="description" name="description" ></textarea>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="photoUrl" name="photoUrl" />
+            </div>
+            <div class="form-group">
+                <select name="categoryId"  class="form-control" >
+                    <option th:each="category : ${categories}" th:text="${category.name}" th:value="${category.id}"></option>
+                </select>
+            </div>
+            <input type="submit" value="Create" class="btn btn-success" />
+        </form>
+    </div>
+</div>
+</body>
+
+</html>
