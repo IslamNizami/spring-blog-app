@@ -9,6 +9,7 @@ import itbrains.az.blogpage2.models.Category;
 import itbrains.az.blogpage2.repositories.ArticleRepository;
 import itbrains.az.blogpage2.repositories.CategoryRepository;
 import itbrains.az.blogpage2.services.ArticleService;
+import itbrains.az.blogpage2.services.EmailService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class ArticleServiceImpl implements ArticleService {
     private ModelMapper modelMapper;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public List<ArticleDto> getArticles() {
