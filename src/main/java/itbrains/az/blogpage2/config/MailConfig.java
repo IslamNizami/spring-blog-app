@@ -20,8 +20,8 @@ public class MailConfig {
         javaMailSender.setHost("smtp.ethereal.email");
         javaMailSender.setPort(587);
 
-        javaMailSender.setUsername("lia.johns@ethereal.email");
-        javaMailSender.setPassword("yuusKWnzM4CqsSbcga");
+        javaMailSender.setUsername("dario.sanford@ethereal.email");
+        javaMailSender.setPassword("ZnGg28bN9WCTYFvQ2J");
 
         Properties props = javaMailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

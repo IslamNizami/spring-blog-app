@@ -6,10 +6,14 @@ import itbrains.az.blogpage2.dtos.articledtos.ArticleDto;
 import itbrains.az.blogpage2.dtos.articledtos.ArticleUpdateDto;
 import itbrains.az.blogpage2.dtos.categorydtos.CategoryCreateDto;
 import itbrains.az.blogpage2.dtos.categorydtos.CategoryDto;
+import itbrains.az.blogpage2.dtos.userdtos.UserDashboardListDto;
 import itbrains.az.blogpage2.models.Article;
 import itbrains.az.blogpage2.models.Category;
+import itbrains.az.blogpage2.repositories.UserRepository;
 import itbrains.az.blogpage2.services.ArticleService;
 import itbrains.az.blogpage2.services.CategoryService;
+import itbrains.az.blogpage2.services.UserService;
+import itbrains.az.blogpage2.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +29,8 @@ public class DashboardController {
 
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/admin")
     public String index()
@@ -98,6 +104,14 @@ public class DashboardController {
     {
         articleService.updateArticle(articleUpdateDto);
         return "redirect:/admin/article";
+    }
+
+    @GetMapping("/admin/users")
+    public String getUsers(Model model)
+    {
+        List<UserDashboardListDto> users = userService.getDashboardUsers();
+        model.addAttribute("users",users);
+        return "/dashboard/auth/user-list";
     }
 
 

@@ -1,7 +1,8 @@
 package itbrains.az.blogpage2.services.impl;
 
 import itbrains.az.blogpage2.dtos.authdtos.RegisterDto;
-import itbrains.az.blogpage2.models.User;
+import itbrains.az.blogpage2.dtos.userdtos.UserDashboardListDto;
+import itbrains.az.blogpage2.models.UserEntity;
 import itbrains.az.blogpage2.repositories.UserRepository;
 import itbrains.az.blogpage2.services.EmailService;
 import itbrains.az.blogpage2.services.UserService;
@@ -10,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean register(RegisterDto register) {
 
-        User user = userRepository.findByEmail(register.getEmail());
+        UserEntity user = userRepository.findByEmail(register.getEmail());
 
         if(user != null) {
             return false;
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
         String hashPassword = bCryptPasswordEncoder.encode(register.getPassword());
         String token = bCryptPasswordEncoder.encode(register.getEmail());
-        User newUser = modelMapper.map(register,User.class);
+        UserEntity newUser = modelMapper.map(register, UserEntity.class);
         newUser.setConfirmationToken(token);
         newUser.setEmailConfirmed(false);
         newUser.setPassword(hashPassword);
@@ -49,12 +51,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean confirmEmail(String email, String token) {
-        User findUser = userRepository.findByEmail(email);
+        UserEntity findUser = userRepository.findByEmail(email);
         if (findUser.getConfirmationToken().equals(token) && findUser != null) {
             findUser.setEmailConfirmed(true);
             userRepository.saveAndFlush(findUser);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<UserDashboardListDto> getDashboardUsers() {
+        List<UserEntity> findUsers = userRepository.findAll();
+        List<UserDashboardListDto> users = findUsers.stream().map(user->modelMapper.map(user, UserDashboardListDto.class)).collect(Collectors.toList());
+        return users;
     }
 }

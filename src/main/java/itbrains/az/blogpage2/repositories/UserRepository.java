@@ -1,9 +1,12 @@
 package itbrains.az.blogpage2.repositories;
 
-import itbrains.az.blogpage2.models.User;
+import itbrains.az.blogpage2.dtos.userdtos.UserDashboardListDto;
+import itbrains.az.blogpage2.models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User,Long> {
+import java.util.List;
 
-    User findByEmail(String email);
+public interface UserRepository extends JpaRepository<UserEntity,Long> {
+
+    UserEntity findByEmail(String email);
 }
