@@ -1,8 +1,12 @@
 package itbrains.az.blogpage2.services.impl;
 
 import itbrains.az.blogpage2.dtos.authdtos.RegisterDto;
+import itbrains.az.blogpage2.dtos.userdtos.UserAddRoleDto;
 import itbrains.az.blogpage2.dtos.userdtos.UserDashboardListDto;
+import itbrains.az.blogpage2.dtos.userdtos.UserDto;
+import itbrains.az.blogpage2.models.Role;
 import itbrains.az.blogpage2.models.UserEntity;
+import itbrains.az.blogpage2.repositories.RoleRepository;
 import itbrains.az.blogpage2.repositories.UserRepository;
 import itbrains.az.blogpage2.services.EmailService;
 import itbrains.az.blogpage2.services.UserService;
@@ -28,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public boolean register(RegisterDto register) {
@@ -65,5 +72,20 @@ public class UserServiceImpl implements UserService {
         List<UserEntity> findUsers = userRepository.findAll();
         List<UserDashboardListDto> users = findUsers.stream().map(user->modelMapper.map(user, UserDashboardListDto.class)).collect(Collectors.toList());
         return users;
+    }
+
+    @Override
+    public UserDto getUserById(Long id) {
+        UserEntity findUser = userRepository.findById(id).orElseThrow();
+        UserDto user = modelMapper.map(findUser, UserDto.class);
+        return user;
+    }
+
+    @Override
+    public void addRole(UserAddRoleDto userAddRole) {
+        UserEntity findUser = userRepository.findByEmail(userAddRole.getEmail());
+        List<Role> roles = roleRepository.findAll().stream().filter(x->x.getId() == userAddRole.getRoleId()).collect(Collectors.toList());
+        findUser.setRoles(roles);
+        userRepository.save(findUser);
     }
 }
