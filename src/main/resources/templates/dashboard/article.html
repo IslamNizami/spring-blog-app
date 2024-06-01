@@ -51,7 +51,7 @@
                     <tr th:each = "article : ${articles}">
                         <td th:text = "${article.title}"></td>
                         <td>
-                            <img width="100" height="100" th:src="${article.photoUrl}">
+                            <img width="100" height="100" th:src="'/uploads/'+${article.photoUrl}">
                         </td>
                         <td th:text = "${article.category.name}"></td>
                         <td th:text = "${article.createdDate}"></td>
